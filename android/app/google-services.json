@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "945814498615",
+    "firebase_url": "https://nduthigang-a4b32-default-rtdb.firebaseio.com",
+    "project_id": "nduthigang-a4b32",
+    "storage_bucket": "nduthigang-a4b32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945814498615:android:03c49de847bcc9c8f43eb2",
+        "android_client_info": {
+          "package_name": "com.NduthiGang.riderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945814498615-epcqtbbqig2jv7b562cr0cmmjstvuc8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRihMbQ5MVxR2SU7iX2L0i2m3zDfN_CCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945814498615-epcqtbbqig2jv7b562cr0cmmjstvuc8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
