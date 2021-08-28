@@ -5,34 +5,40 @@ import 'package:my_uber/AllScreens/loginScreen.dart';
 import 'package:my_uber/AllScreens/mainscreen.dart';
 //import 'package:my_uber/AllScreens/loginScreen.dart';
 import 'package:my_uber/AllScreens/registrationScreen.dart';
+import 'package:my_uber/DataHandler/appData.dart';
+import 'package:provider/provider.dart';
 //import 'package:my_uber/AllScreens/mainscreen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("users");
+DatabaseReference usersRef =
+    FirebaseDatabase.instance.reference().child("users");
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Taxi Rider App',
-      theme: ThemeData(
-        fontFamily: 'Brand-regualar',
-        primarySwatch: Colors.blueGrey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider(
+      create: (context) => AppData(),
+      child: MaterialApp(
+        title: 'Taxi Rider App',
+        theme: ThemeData(
+          fontFamily: 'Brand-regualar',
+          primarySwatch: Colors.blueGrey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: MainScreen.idScreen,
+        routes: {
+          RegistrationScreen.idScreen: (context) => RegistrationScreen(),
+          LoginScreen.idScreen: (context) => LoginScreen(),
+          MainScreen.idScreen: (context) => MainScreen(),
+        },
+        debugShowCheckedModeBanner: false,
       ),
-      initialRoute: MainScreen.idScreen,
-      routes: 
-      {
-        RegistrationScreen.idScreen:(context) => RegistrationScreen(),
-        LoginScreen.idScreen:(context)=>LoginScreen(),
-        MainScreen.idScreen:(context)=>MainScreen(),
-      },
-      debugShowCheckedModeBanner: false,
     );
   }
 }

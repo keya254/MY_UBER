@@ -1,9 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_uber/AllScreens/searchScreen.dart';
 import 'package:my_uber/AllWidgets/divider.dart';
+import 'package:my_uber/Assistants/assistantMethods.dart';
+import 'package:my_uber/DataHandler/appData.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -17,9 +20,9 @@ class _MainScreenState extends State<MainScreen> {
   late GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
-
+  
   late Position currentPosition;
-  var geoLocator = Geolocator();
+  var geolocator = Geolocator();
   double bottomPaddingOfMap=0;
 
   void locatePosition() async {
@@ -27,12 +30,15 @@ class _MainScreenState extends State<MainScreen> {
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
 
-    LatLng latLatPosition = LatLng(position.latitude, position.longitude);
+    LatLng latLngPosition=LatLng(position.latitude, position.longitude);
 
     CameraPosition cameraPosition =
-        new CameraPosition(target: latLatPosition, zoom: 14);
+        new CameraPosition(target: latLngPosition, zoom: 14);
     newGoogleMapController
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String address = await AssistantMethods.searchCoordinateAddress(position,context );
+    print("This is your address :: " + address);
   }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -215,32 +221,37 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 6.0,
-                            color: Colors.black54,
-                            spreadRadius: 0.5,
-                            offset: Offset(0.7, 0.7),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: Colors.blueAccent,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder:(context)=>SearchScreen() ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 6.0,
+                              color: Colors.black54,
+                              spreadRadius: 0.5,
+                              offset: Offset(0.7, 0.7),
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text("Search Drop off"),
                           ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Colors.blueAccent,
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("Search Drop off"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -259,7 +270,12 @@ class _MainScreenState extends State<MainScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Add Home"),
+                            Text(
+                              // ignore: unnecessary_null_comparison
+                              Provider.of<AppData>(context).pickUpLocation != null
+                              ?  Provider.of<AppData>(context).pickUpLocation!.placeName??""
+                              :"ADD HOME",
+                            ),
                             SizedBox(
                               height: 4.0,
                             ),
