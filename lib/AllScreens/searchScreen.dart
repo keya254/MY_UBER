@@ -1,31 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:my_uber/DataHandler/appData.dart';
-import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
-
   @override
-  
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   TextEditingController pickUpTextEditingController = TextEditingController();
-  TextEditingController dropOffTextEditingController = TextEditingController();
+  TextEditingController whereToTextEditingController = TextEditingController();
+   TextEditingController rNameTextEditingController = TextEditingController();
+  TextEditingController iDnameTextEditingController = TextEditingController();
+   TextEditingController phoneNTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
-   String placeAddress = Provider.of<AppData>(context).pickUpLocation!.placeName ??"";
-   pickUpTextEditingController.text = placeAddress;
-
-
     return Scaffold(
       body: Column(
         children: [
           Container(
-            height: 215.0,
+            height: 325.0,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -48,16 +41,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   Stack(
                     children: [
                       GestureDetector(
-                        onTap: (){
-
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back)),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.arrow_back)),
                       Center(
                         child: Text(
-                          "set Drop Off",
-                          style: TextStyle(fontSize: 18.0),
+                          "Set Drop Off",
+                          style: TextStyle(fontSize: 20.0),
                         ),
                       )
                     ],
@@ -69,8 +60,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     children: [
                       Image.asset(
                         "images/pickicon.png",
-                        height: 16.0,
-                        width: 16.0,
+                        height: 20.0,
+                        width: 20.0,
                       ),
                       SizedBox(
                         width: 18.0,
@@ -78,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[400],
+                            color: Colors.blue,
                             borderRadius: BorderRadiusDirectional.circular(5.0),
                           ),
                           child: Padding(
@@ -87,11 +78,16 @@ class _SearchScreenState extends State<SearchScreen> {
                               controller: pickUpTextEditingController,
                               decoration: InputDecoration(
                                 hintText: "PickUp Location",
-                                fillColor: Colors.grey[400],
+                                fillColor: Colors.white,
                                 filled: true,
-                                border:InputBorder.none,
+                                border: InputBorder.none,
                                 isDense: true,
-                                contentPadding: EdgeInsets.only(left:11.0, top:8.0,bottom: 8.0,right: 11.0,),
+                                contentPadding: EdgeInsets.only(
+                                  left: 11.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                  right: 11.0,
+                                ),
                               ),
                             ),
                           ),
@@ -99,16 +95,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ),
-
-                    SizedBox(
+                  SizedBox(
                     height: 10.0,
                   ),
                   Row(
                     children: [
                       Image.asset(
                         "images/desticon.png",
-                        height: 16.0,
-                        width: 16.0,
+                        height: 20.0,
+                        width: 20.0,
                       ),
                       SizedBox(
                         width: 18.0,
@@ -116,20 +111,139 @@ class _SearchScreenState extends State<SearchScreen> {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[400],
+                            color: Colors.blue,
                             borderRadius: BorderRadiusDirectional.circular(5.0),
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(3.0),
                             child: TextField(
-                              controller: dropOffTextEditingController,
+                              controller: whereToTextEditingController,
                               decoration: InputDecoration(
                                 hintText: "Where To?",
-                                fillColor: Colors.grey[400],
+                                fillColor: Colors.white,
                                 filled: true,
-                                border:InputBorder.none,
+                                border: InputBorder.none,
                                 isDense: true,
-                                contentPadding: EdgeInsets.only(left:11.0, top:8.0,bottom: 8.0,right: 11.0,),
+                                contentPadding: EdgeInsets.only(
+                                  left: 11.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                  right: 11.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: [
+                     Icon(Icons.person,color: Colors.blue,),
+                      SizedBox(
+                        width: 18.0,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadiusDirectional.circular(5.0),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: TextField(
+                              controller: rNameTextEditingController,
+                              decoration: InputDecoration(
+                                hintText: "Receiver's Name",
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(
+                                  left: 11.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                  right: 11.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                 SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: [
+                     Icon(Icons.card_membership, color: Colors.blue,),
+                      SizedBox(
+                        width: 18.0,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadiusDirectional.circular(5.0),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: TextField(
+                              controller: phoneNTextEditingController,
+                              decoration: InputDecoration(
+                                hintText: "ID Number",
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(
+                                  left: 11.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                  right: 11.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: [
+                     Icon(Icons.phone, color: Colors.blue,),
+                      SizedBox(
+                        width: 18.0,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadiusDirectional.circular(5.0),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: TextField(
+                              controller: phoneNTextEditingController,
+                              decoration: InputDecoration(
+                                hintText: "Phone Number",
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(
+                                  left: 11.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                  right: 11.0,
+                                ),
                               ),
                             ),
                           ),

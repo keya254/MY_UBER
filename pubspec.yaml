@@ -36,6 +36,11 @@ dependencies:
   geolocator: ^7.4.0
   http: ^0.13.3
   provider: ^6.0.0
+  google_geocoding: ^0.2.0
+  places_service: ^0.1.0+2
+  dio: ^4.0.0
+  flutter_polyline_points: ^1.0.0
+  geocoding: ^2.0.1
 
 dev_dependencies:
   flutter_test:

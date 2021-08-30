@@ -2,11 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:my_uber/AllScreens/searchScreen.dart';
 import 'package:my_uber/AllWidgets/divider.dart';
 import 'package:my_uber/Assistants/assistantMethods.dart';
-import 'package:my_uber/DataHandler/appData.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -16,8 +13,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  TextEditingController pickupTextEditingController = TextEditingController();
+  TextEditingController dropoffTextEditingController = TextEditingController();
+  TextEditingController pRnameTextEditingController = TextEditingController();
+  TextEditingController cAnameTextEditingController = TextEditingController();
+  TextEditingController iDnameTextEditingController = TextEditingController();
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
-  late GoogleMapController newGoogleMapController;
+  GoogleMapController? newGoogleMapController;
+  
+  String? searchAddr;
+  
 
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
   
@@ -30,15 +35,17 @@ class _MainScreenState extends State<MainScreen> {
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
 
+    // ignore: non_constant_identifier_names
     LatLng latLngPosition=LatLng(position.latitude, position.longitude);
 
     CameraPosition cameraPosition =
         new CameraPosition(target: latLngPosition, zoom: 14);
     newGoogleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+        ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    String address = await AssistantMethods.searchCoordinateAddress(position,context );
-    print("This is your address :: " + address);
+        String address = await AssistantMethods.searchCoordinateAddress(position);
+        print("this is your address:: "+ address);
+
   }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -51,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       key: scaffoldkey,
       appBar: AppBar(
-        title: Text("Main Screen"),
+        title: Text("Nervar Logistics"),
       ),
       drawer: Container(
         color: Colors.white,
@@ -215,7 +222,7 @@ class _MainScreenState extends State<MainScreen> {
                       style: TextStyle(fontSize: 18.0),
                     ),
                     Text(
-                      "where to?",
+                      "Where are you sending your parcel to?",
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(
@@ -223,7 +230,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder:(context)=>SearchScreen() ));
+                       
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -249,7 +256,7 @@ class _MainScreenState extends State<MainScreen> {
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Text("Search Drop off"),
+                              Text("Set Pick Up Location"),
                             ],
                           ),
                         ),
@@ -270,11 +277,7 @@ class _MainScreenState extends State<MainScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              // ignore: unnecessary_null_comparison
-                              Provider.of<AppData>(context).pickUpLocation != null
-                              ?  Provider.of<AppData>(context).pickUpLocation!.placeName??""
-                              :"ADD HOME",
+                            Text("ADD HOME",
                             ),
                             SizedBox(
                               height: 4.0,
