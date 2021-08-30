@@ -2,8 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_uber/AllScreens/searchScreen.dart';
 import 'package:my_uber/AllWidgets/divider.dart';
 import 'package:my_uber/Assistants/assistantMethods.dart';
+import 'package:my_uber/DataHandler/appData.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -43,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-        String address = await AssistantMethods.searchCoordinateAddress(position);
+        String address = await AssistantMethods.searchCoordinateAddress(position, context);
         print("this is your address:: "+ address);
 
   }
@@ -230,7 +233,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                       
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=> SearchScreen()));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -256,7 +259,7 @@ class _MainScreenState extends State<MainScreen> {
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Text("Set Pick Up Location"),
+                              Text("Set Drop off Location"),
                             ],
                           ),
                         ),
@@ -277,13 +280,16 @@ class _MainScreenState extends State<MainScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("ADD HOME",
+                            Text(
+                              Provider.of<AppData>(context).pickUpLocation != null
+                              ? Provider.of<AppData>(context).pickUpLocation!.placeName ??""
+                              : "Add home"
                             ),
                             SizedBox(
                               height: 4.0,
                             ),
                             Text(
-                              "Your Home Address",
+                              "Your Current Address",
                               style: TextStyle(
                                   color: Colors.black54, fontSize: 12.0),
                             ),

@@ -1,4 +1,11 @@
+
 import 'package:flutter/material.dart';
+import 'package:my_uber/AllWidgets/divider.dart';
+import 'package:my_uber/Assistants/requestAssistant.dart';
+import 'package:my_uber/DataHandler/appData.dart';
+import 'package:my_uber/Models/placePrediction.dart';
+import 'package:my_uber/secrets.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -7,17 +14,22 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController pickUpTextEditingController = TextEditingController();
-  TextEditingController whereToTextEditingController = TextEditingController();
-   TextEditingController rNameTextEditingController = TextEditingController();
+  TextEditingController dropOffTextEditingController = TextEditingController();
+  TextEditingController rNameTextEditingController = TextEditingController();
   TextEditingController iDnameTextEditingController = TextEditingController();
-   TextEditingController phoneNTextEditingController = TextEditingController();
+  TextEditingController phoneNTextEditingController = TextEditingController();
+  List<PlacePredictions> placepredictionList = [];
 
   @override
   Widget build(BuildContext context) {
+    String placeAddress =
+        Provider.of<AppData>(context).pickUpLocation!.placeName ?? "";
+    pickUpTextEditingController.text = placeAddress;
     return Scaffold(
       body: Column(
         children: [
           Container(
+
             height: 325.0,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -117,9 +129,13 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: Padding(
                             padding: EdgeInsets.all(3.0),
                             child: TextField(
-                              controller: whereToTextEditingController,
+                              onChanged: (val){
+                                findPlace(val);
+
+                              },
+                              controller: dropOffTextEditingController,
                               decoration: InputDecoration(
-                                hintText: "Where To?",
+                                hintText: "Drop Off",
                                 fillColor: Colors.white,
                                 filled: true,
                                 border: InputBorder.none,
@@ -142,7 +158,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   Row(
                     children: [
-                     Icon(Icons.person,color: Colors.blue,),
+                      Icon(
+                        Icons.person,
+                        color: Colors.blue,
+                      ),
                       SizedBox(
                         width: 18.0,
                       ),
@@ -175,12 +194,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ),
-                 SizedBox(
+                  SizedBox(
                     height: 10.0,
                   ),
                   Row(
                     children: [
-                     Icon(Icons.card_membership, color: Colors.blue,),
+                      Icon(
+                        Icons.card_membership,
+                        color: Colors.blue,
+                      ),
                       SizedBox(
                         width: 18.0,
                       ),
@@ -218,7 +240,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   Row(
                     children: [
-                     Icon(Icons.phone, color: Colors.blue,),
+                      Icon(
+                        Icons.phone,
+                        color: Colors.blue,
+                      ),
                       SizedBox(
                         width: 18.0,
                       ),
@@ -254,9 +279,85 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-          )
+          ),
+      
+      
+       (placepredictionList.length>0)
+       ? Padding(
+         padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 16.0),
+         child: ListView.separated(
+           padding: EdgeInsetsDirectional.all(0.0),
+           itemBuilder: (context, index){
+             return PredictionTile(placePredictions:placepredictionList[index] ,);
+           },
+           separatorBuilder: (BuildContext context, int index)=> Dividerwidget(),
+           itemCount: placepredictionList.length ,
+           shrinkWrap: true,
+           physics: ClampingScrollPhysics(),
+           
+           ),)
+       :Container(),
+       
+       //tile for predictions
         ],
       ),
+    );
+  }
+
+  void findPlace(String placeName) async {
+    if (placeName.length > 1) {
+      String autoCompleteUrl =
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=1234&components=country:ke";
+          var res = await RequestAssistant.getRequest(autoCompleteUrl);
+          if (res == "failed")
+          {
+            return;
+          }
+          if (res["status"]== "ok")
+          {
+            var predictions = res["predictions"];
+
+            var placesList = (predictions as List).map((e) => PlacePredictions.fromJson(e)).toList();
+
+            setState(() {
+              placepredictionList = placesList;
+            });
+          }
+    }
+  }
+}
+
+class PredictionTile extends StatelessWidget {
+  final PlacePredictions ?placePredictions ;
+
+  PredictionTile({ Key? key, this.placePredictions }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+     child: Column(
+       children: [
+         SizedBox(width: 10.0,),
+       Row(children: [
+        Icon(Icons.add_location),
+        SizedBox(width: 14.0,),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //guessed this ones though iko na issues
+                    Text(placePredictions!.mainText='',overflow: TextOverflow.ellipsis,  style:TextStyle(fontSize: 16.0)),
+                    SizedBox(height: 3.0,),
+                    Text(placePredictions!.secondaryText='', overflow: TextOverflow.ellipsis, style:TextStyle(fontSize: 12.0,color: Colors.grey) ,),
+                  ],
+          
+          ),
+        )
+      ],
+      ),
+      SizedBox(width: 10.0,),
+     ],
+     ),
+      
     );
   }
 }
