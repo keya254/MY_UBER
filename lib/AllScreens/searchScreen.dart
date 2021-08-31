@@ -131,7 +131,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: TextField(
                               onChanged: (val){
                                 findPlace(val);
-
                               },
                               controller: dropOffTextEditingController,
                               decoration: InputDecoration(
@@ -313,7 +312,7 @@ class _SearchScreenState extends State<SearchScreen> {
           {
             return;
           }
-          if (res["status"]== "ok")
+          if (res["status"] == "OK")
           {
             var predictions = res["predictions"];
 
@@ -330,7 +329,7 @@ class _SearchScreenState extends State<SearchScreen> {
 class PredictionTile extends StatelessWidget {
   final PlacePredictions ?placePredictions ;
 
-  PredictionTile({ Key? key, this.placePredictions }) : super(key: key);
+  PredictionTile({ Key? key, this.placePredictions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -345,9 +344,9 @@ class PredictionTile extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //guessed this ones though iko na issues
-                    Text(placePredictions!.mainText='',overflow: TextOverflow.ellipsis,  style:TextStyle(fontSize: 16.0)),
+                    Text(placePredictions!.mainText.toString(),overflow: TextOverflow.ellipsis,  style:TextStyle(fontSize: 16.0)),
                     SizedBox(height: 3.0,),
-                    Text(placePredictions!.secondaryText='', overflow: TextOverflow.ellipsis, style:TextStyle(fontSize: 12.0,color: Colors.grey) ,),
+                    Text(placePredictions!.secondaryText.toString(),overflow: TextOverflow.ellipsis, style:TextStyle(fontSize: 12.0,color: Colors.grey) ,),
                   ],
           
           ),
