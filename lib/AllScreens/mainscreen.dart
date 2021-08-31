@@ -1,9 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_uber/AllScreens/searchScreen.dart';
 import 'package:my_uber/AllWidgets/divider.dart';
+import 'package:my_uber/Assistants/assistantMethods.dart';
+import 'package:my_uber/DataHandler/appData.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -13,13 +16,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  TextEditingController pickupTextEditingController = TextEditingController();
+  TextEditingController dropoffTextEditingController = TextEditingController();
+  TextEditingController pRnameTextEditingController = TextEditingController();
+  TextEditingController cAnameTextEditingController = TextEditingController();
+  TextEditingController iDnameTextEditingController = TextEditingController();
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
-  late GoogleMapController newGoogleMapController;
+  GoogleMapController? newGoogleMapController;
+  
+  String? searchAddr;
+  
 
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
-
+  
   late Position currentPosition;
-  var geoLocator = Geolocator();
+  var geolocator = Geolocator();
   double bottomPaddingOfMap=0;
 
   void locatePosition() async {
@@ -27,12 +38,17 @@ class _MainScreenState extends State<MainScreen> {
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
 
-    LatLng latLatPosition = LatLng(position.latitude, position.longitude);
+    // ignore: non_constant_identifier_names
+    LatLng latLngPosition=LatLng(position.latitude, position.longitude);
 
     CameraPosition cameraPosition =
-        new CameraPosition(target: latLatPosition, zoom: 14);
+        new CameraPosition(target: latLngPosition, zoom: 14);
     newGoogleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+        ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+        String address = await AssistantMethods.searchCoordinateAddress(position, context);
+        print("this is your address:: "+ address);
+
   }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -45,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       key: scaffoldkey,
       appBar: AppBar(
-        title: Text("Main Screen"),
+        title: Text("Nervar Logistics"),
       ),
       drawer: Container(
         color: Colors.white,
@@ -209,38 +225,43 @@ class _MainScreenState extends State<MainScreen> {
                       style: TextStyle(fontSize: 18.0),
                     ),
                     Text(
-                      "where to?",
+                      "Where are you sending your parcel to?",
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 6.0,
-                            color: Colors.black54,
-                            spreadRadius: 0.5,
-                            offset: Offset(0.7, 0.7),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: Colors.blueAccent,
+                    GestureDetector(
+                      onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=> SearchScreen()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 6.0,
+                              color: Colors.black54,
+                              spreadRadius: 0.5,
+                              offset: Offset(0.7, 0.7),
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text("Search Drop off"),
                           ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Colors.blueAccent,
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("Set Drop off Location"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -259,12 +280,16 @@ class _MainScreenState extends State<MainScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Add Home"),
+                            Text(
+                              Provider.of<AppData>(context).pickUpLocation != null
+                              ? Provider.of<AppData>(context).pickUpLocation!.placeName ??""
+                              : "Add home"
+                            ),
                             SizedBox(
                               height: 4.0,
                             ),
                             Text(
-                              "Your Home Address",
+                              "Your Current Address",
                               style: TextStyle(
                                   color: Colors.black54, fontSize: 12.0),
                             ),
