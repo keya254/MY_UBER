@@ -22,8 +22,8 @@ class AssistantMethods {
      // placeAddress = response["results"][0]["formatted_address"];
      st1 = response["results"][0]["address_components"][0]["long_name"];
      st2 = response["results"][0]["address_components"][1]["long_name"];
-     st3 = response["results"][0]["address_components"][3]["long_name"];
-     st4 = response["results"][0]["address_components"][4]["long_name"];
+     st3 = response["results"][0]["address_components"][4]["long_name"];
+     st4 = response["results"][0]["address_components"][5]["long_name"];
 
      placeAddress = st1 + " ," + st2 + " ," + st3 + " ," + st4;
 
@@ -56,5 +56,19 @@ class AssistantMethods {
     directionDetails.durationValue= res["routes"][0]["legs"][0]["duration"]["value"];
 
     return directionDetails;
+  }
+
+  static int calculateFares(DirectionDetails directionDetails){
+
+    //in terms of usd
+    double timeTravelledFare = (directionDetails.durationValue! / 60)* 0.20;
+    double distanceTravelledFare = (directionDetails.distanceValue! / 1000)* 0.20;
+    double totalFareAmount = timeTravelledFare + distanceTravelledFare;
+
+
+    //1$ = 100Kes
+    double totalLocalAmount = totalFareAmount * 100;
+
+    return totalLocalAmount.truncate();
   }
 }
