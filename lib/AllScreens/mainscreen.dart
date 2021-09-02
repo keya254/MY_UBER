@@ -23,8 +23,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   TextEditingController pickupTextEditingController = TextEditingController();
   TextEditingController dropoffTextEditingController = TextEditingController();
-  TextEditingController pRnameTextEditingController = TextEditingController();
-  TextEditingController cpnameTextEditingController = TextEditingController();
+  TextEditingController ?pRnameTextEditingController = TextEditingController();
+  TextEditingController ?cpnameTextEditingController = TextEditingController();
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController? newGoogleMapController;
 
