@@ -77,7 +77,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: phoneTextEditingController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                        hintText: "Phone",
+                        hintText: "Your Phone",
                         errorText: "Enter Your Phone Number",
                         hintStyle: TextStyle(
                           fontSize: 20.0,

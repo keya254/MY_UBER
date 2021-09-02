@@ -16,8 +16,9 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController pickUpTextEditingController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
-   TextEditingController pRnameTextEditingController = TextEditingController();
-  TextEditingController cpnameTextEditingController = TextEditingController();
+   TextEditingController ?pRnameTextEditingController = TextEditingController();
+  TextEditingController ?cpnameTextEditingController = TextEditingController();
+  
   List<PlacePredictions> placepredictionList = [];
 
   @override
@@ -173,6 +174,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             padding: EdgeInsets.all(3.0),
                             child: TextField(
                               controller: cpnameTextEditingController,
+                              keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
                                 hintText: "Receivers Contact",
                                 fillColor: Colors.white,
