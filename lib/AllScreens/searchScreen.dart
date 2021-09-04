@@ -16,8 +16,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController pickUpTextEditingController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
-   TextEditingController ?pRnameTextEditingController = TextEditingController();
-  TextEditingController ?cpnameTextEditingController = TextEditingController();
+   TextEditingController ?rNameTextEditingController = TextEditingController();
+  TextEditingController ?rPhoneTextEditingController = TextEditingController();
   
   List<PlacePredictions> placepredictionList = [];
 
@@ -30,7 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           Container(
-            height: 265.0,
+            height: 180.0,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -108,93 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                      Row(
-                    children: [
-                      Image.asset(
-                        "images/desticon.png",
-                        height: 20.0,
-                        width: 20.0,
-                      ),
-                      SizedBox(
-                        width: 18.0,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadiusDirectional.circular(5.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(3.0),
-                            child: TextField(
-                              controller: pRnameTextEditingController,
-                              decoration: InputDecoration(
-                                hintText: "Receivers Name",
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.only(
-                                  left: 11.0,
-                                  top: 8.0,
-                                  bottom: 8.0,
-                                  right: 11.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      
-                    ],
-                  ),
-                   SizedBox(
-                    height: 5.0,
-                  ),
-                      Row(
-                    children: [
-                      Image.asset(
-                        "images/desticon.png",
-                        height: 20.0,
-                        width: 20.0,
-                      ),
-                      SizedBox(
-                        width: 18.0,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadiusDirectional.circular(5.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(3.0),
-                            child: TextField(
-                              controller: cpnameTextEditingController,
-                              keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(
-                                hintText: "Receivers Contact",
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.only(
-                                  left: 11.0,
-                                  top: 8.0,
-                                  bottom: 8.0,
-                                  right: 11.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      
-                    ],
-                  ),
+               
                    SizedBox(
                     height: 5.0,
                   ),

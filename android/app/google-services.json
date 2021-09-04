@@ -21,7 +21,42 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBRihMbQ5MVxR2SU7iX2L0i2m3zDfN_CCM"
+          "current_key": "AIzaSyAG7H47OdKBCDmggJWTbBVCx-4RqPx8ts8"
+        },
+        {
+          "current_key": "AIzaSyBLWW-nruxafNE-NVi4JDECN7S7FcCVkrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945814498615-epcqtbbqig2jv7b562cr0cmmjstvuc8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945814498615:android:3f93856d42016b13f43eb2",
+        "android_client_info": {
+          "package_name": "com.nduthigang.ridersapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945814498615-epcqtbbqig2jv7b562cr0cmmjstvuc8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG7H47OdKBCDmggJWTbBVCx-4RqPx8ts8"
+        },
+        {
+          "current_key": "AIzaSyBLWW-nruxafNE-NVi4JDECN7S7FcCVkrU"
         }
       ],
       "services": {

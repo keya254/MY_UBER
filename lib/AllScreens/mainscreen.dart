@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +12,7 @@ import 'package:my_uber/AllWidgets/progressDialog.dart';
 import 'package:my_uber/Assistants/assistantMethods.dart';
 import 'package:my_uber/DataHandler/appData.dart';
 import 'package:my_uber/Models/directDetails.dart';
+import 'package:my_uber/secrets.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -23,8 +25,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   TextEditingController pickupTextEditingController = TextEditingController();
   TextEditingController dropoffTextEditingController = TextEditingController();
-  TextEditingController ?pRnameTextEditingController = TextEditingController();
-  TextEditingController ?cpnameTextEditingController = TextEditingController();
+  TextEditingController ?rNameTextEditingController = TextEditingController();
+  TextEditingController ?rPhoneTextEditingController = TextEditingController();
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController? newGoogleMapController;
 
@@ -49,14 +51,70 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   bool drawerOpen = true;
 
+  DatabaseReference? rideRequestRef;
+
+  @override
+  void initState(){
+    super.initState();
+    AssistantMethods.getCurrentOnlineUserInfo();
+  }
+
+  void saveRideRequest(){
+
+    rideRequestRef = FirebaseDatabase.instance.reference().child("Ride Requests");
+
+    var pickup = Provider.of<AppData>(context,listen: false).pickUpLocation;
+    var dropOff = Provider.of<AppData>(context,listen: false).dropOffLocation;
+
+
+    Map pickUpLocMap = {
+
+      "latitude": pickup?.latitude.toString(),
+      "longitude": pickup?.longitude.toString(),
+
+    };
+     Map dropOffLocMap = {
+
+      "latitude": dropOff?.latitude.toString(),
+      "longitude": dropOff?.longitude.toString(),
+      
+
+    };
+
+    Map rideInfoMap = {
+
+      "driver_id":"waiting",
+      "payment_method":"cash",
+      "payment": pickUpLocMap,
+      "dropoff": dropOffLocMap,
+      "created_at": DateTime.now().toString(),
+      "rider_name": userCurrentInfo?.name,
+      "rider_phone": userCurrentInfo?.phone,
+      "pickup_address":pickup?.placeName,
+      "dropoff_address":dropOff?.placeName,
+     "rName":rNameTextEditingController!.text,
+      "rPhone":rPhoneTextEditingController!.text,
+    };
+
+    rideRequestRef?.set(rideInfoMap);
+  }
+
+  void cancelRideRequest(){
+      rideRequestRef?.remove();
+
+  }
+
+
   void displayRequestRideContainer(){
     setState(() {
-      requestRideContainerHeight = 250.0;
+      requestRideContainerHeight = 350.0;
       rideDetailsContainerHeight = 0.0;
       bottomPaddingOfMap = 230.0;
       drawerOpen = true;
 
     });
+
+    saveRideRequest();
   }
 
   resetApp() {
@@ -64,6 +122,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       drawerOpen = true;
       searchContainerHeight = 300.0;
       rideDetailsContainerHeight = 0;
+      requestRideContainerHeight = 0;
       bottomPaddingOfMap = 230.0;
 
       polylineSet.clear();
@@ -78,7 +137,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     await getPlaceDirection();
     setState(() {
       searchContainerHeight = 0;
-      rideDetailsContainerHeight = 240.0;
+      rideDetailsContainerHeight = 360.0;
       bottomPaddingOfMap = 230.0;
       drawerOpen = false;
     });
@@ -349,40 +408,45 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                       SizedBox(
                         height: 24.0,
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.home,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(
-                            width: 12.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              
-                              Text(Provider.of<AppData>(context)
-                                          .pickUpLocation !=
-                                      null
-                                  ? Provider.of<AppData>(context)
-                                          .pickUpLocation!
-                                          .placeName ??
-                                      ""
-                                  : "Add home",
-                                  overflow:TextOverflow.fade ,
-                                  ),
-                              SizedBox(
-                                height: 4.0,
-                              ),
-                              Text(
-                                "Your Current Address",
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12.0),
-                              ),
-                            ],
-                          ),
-                        ],
+                      SingleChildScrollView(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.home,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              width: 12.0,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                
+                                Text(
+                                  Provider.of<AppData>(context)
+                                            .pickUpLocation !=
+                                        null
+                                    ? Provider.of<AppData>(context)
+                                            .pickUpLocation!
+                                            .placeName ??
+                                        ""
+                                    : "Add home",
+                                    overflow:TextOverflow.fade ,
+                                     
+                                    
+                                    ),
+                                SizedBox(
+                                  height: 4.0,
+                                ),
+                                Text(
+                                  "Your Current Address",
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 12.0),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 10.0,
@@ -448,10 +512,38 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
+             
+
+                          
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 17.0),
+                  padding: EdgeInsets.symmetric(horizontal:16.0 ),
                   child: Column(
                     children: [
+                       Icon(Icons.bolt, size: 28.0,),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                      TextField(
+                        controller: rNameTextEditingController,
+                        keyboardType: TextInputType.text,
+                         decoration: InputDecoration(
+                                hintText: "Receivers Name",
+                                fillColor: Colors.tealAccent[100],
+                                filled: true,
+                         ),
+
+                      ),
+                       TextField(
+                        controller: rPhoneTextEditingController,
+                        keyboardType: TextInputType.phone,
+                         decoration: InputDecoration(
+                                hintText: "Receivers Phone",
+                                fillColor: Colors.tealAccent[100],
+                                filled: true,
+                         ),
+
+                      ),
+                      
                       Container(
                         width: double.infinity,
                         color: Colors.tealAccent[100],
@@ -487,7 +579,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                               Expanded(child: Container()),
                               Text(
                                 ((tripDirectionDetails != null)
-                                    ? '\kes ${AssistantMethods.calculateFares(tripDirectionDetails!)}'
+                                    ? '\KES ${AssistantMethods.calculateFares(tripDirectionDetails!)}'
                                     : ''),
                                 style: TextStyle(fontFamily: "Brand-semibold"),
                               ),
@@ -522,11 +614,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-
-                      
                        SizedBox(
                         height: 10.0,
                       ),
+                   
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: ElevatedButton(
@@ -621,17 +712,23 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     ),
                   SizedBox(height: 22.0,),
 
-                  Container(
-                    height:60.0,
-                    width: 60.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(26.0),
-                      border: Border.all(width: 2.0,color: Colors.grey,),
-                    ),
-                    child: Icon(Icons.close, size: 26.0,),
-                    
-                    ),
+                  GestureDetector(
+                    onTap: (){
+                      cancelRideRequest();
+                      resetApp();
+                    },
+                    child: Container(
+                      height:60.0,
+                      width: 60.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(26.0),
+                        border: Border.all(width: 2.0,color: Colors.grey,),
+                      ),
+                      child: Icon(Icons.close, size: 26.0,),
+                      
+                      ),
+                  ),
                     SizedBox(height: 10.0,),
                     Container(
                       width: double.infinity,
