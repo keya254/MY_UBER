@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,7 +27,7 @@ class AssistantMethods {
      // placeAddress = response["results"][0]["formatted_address"];
      st1 = response["results"][0]["address_components"][0]["long_name"];
      st2 = response["results"][0]["address_components"][1]["long_name"];
-     st3 = response["results"][0]["address_components"][4]["long_name"];
+     st3 = response["results"][0]["address_components"][3]["long_name"];
      st4 = response["results"][0]["address_components"][5]["long_name"];
 
      placeAddress = st1 + " ," + st2 + " ," + st3 + " ," + st4;
@@ -89,6 +91,12 @@ class AssistantMethods {
 
       }
       );
+
+    }
+    static double createRandomNumber(int num){
+      var random = Random();
+      int radNumber = random.nextInt(num);
+      return radNumber.toDouble();
 
     }
 

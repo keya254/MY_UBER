@@ -7,7 +7,7 @@
  
 
    <application
-        android:label="my_uber"
+        android:label="Nervar"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -44,6 +44,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="Apikey"/>
+               android:value="AIzaSyAG7H47OdKBCDmggJWTbBVCx-4RqPx8ts8"/>
     </application>
 </manifest>
